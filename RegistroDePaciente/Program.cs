@@ -111,8 +111,20 @@ namespace RegistroDePaciente
                 }
                 i++;
             }
+            // Fecha de registro:
+
+            fecha[contadorPacientes - 1] =
+    DateTime.Now.ToString("dd/MM/yyyy");
+
+            // Informacion: 
+
+            string distrito = "El Agustino";
+            string centroSalud = "Hospital Nacional Unanue";
+            string tipoSolicitud = "Ambulancia";
+            string descripcion = "Requiere oxígeno de emergencia";
+
         }
-        }
+    }
 
     }
 }
