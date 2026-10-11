@@ -20,13 +20,13 @@ namespace RegistroDePaciente
             // Calcular la prioridad
 
             static int CalcularPrioridad(int nivel_de_emergencia, string tipoSolicitud)
-            {
+            {   
                 int prioridad;
                 prioridad  = nivel_de_emergencia * 2
                 tipoSolicitud = tipoSolicitud.ToUpper();
                 if (tipoSolicitud == "AMBULANCIA") || ( tipoSolicitud == "MEDICAMENTOS")
                         {
-                    prioridad = prioridad + 3
+                    prioridad = prioridad + 3;
                         }
                 return prioridad;
             
@@ -65,6 +65,31 @@ namespace RegistroDePaciente
 
         codigoActual[contadorPacientes - 1] =
                     GenerarCodigoPaciente(contadorPacientes);
+
+            // Nombres y apellidos del paciente
+            do
+            {
+                Console.WriteLine("Ingrese sus nombres:");
+                nombres[contador_paciente - 1] = Console.ReadLine();
+                if (nombres == "")
+                {
+                    Console.WriteLine("Error: El campo de nombres no puede estar vacío. Por favor, ingrese sus nombres.");  
+
+                }
+                while (nombres[contador_paciente - 1] == "") ;
+            }
+
+            do
+            {
+                Console.WriteLine("Ingrese los apellidos completos:");
+                apellidos[contador_paciente - 1] = Console.ReadLine();
+
+                if (apellidos[contador_paciente - 1] == "")
+                {
+                    Console.WriteLine("Error: debe ingresar los apellidos.");
+                }
+
+            } while (apellidos[contador_paciente - 1] == "");
 
         }
 
