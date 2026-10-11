@@ -17,6 +17,21 @@ namespace RegistroDePaciente
             }
             return "PAC-" + numerodecodigo;
 
+            // Calcular la prioridad
+
+            static int CalcularPrioridad(int nivel_de_emergencia, string tipoSolicitud)
+            {
+                int prioridad;
+                prioridad  = nivel_de_emergencia * 2
+                tipoSolicitud = tipoSolicitud.ToUpper();
+                if (tipoSolicitud == "AMBULANCIA") || ( tipoSolicitud == "MEDICAMENTOS")
+                        {
+                    prioridad = prioridad + 3
+                        }
+                return prioridad;
+            
+            }
+
         }
 
     }
