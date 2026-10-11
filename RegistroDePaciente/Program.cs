@@ -61,7 +61,10 @@ namespace RegistroDePaciente
             Console.WriteLine("");
             Console.WriteLine("=======================");
            }
+            // Generacion del codigo de pacientes:
 
+        codigoActual[contadorPacientes - 1] =
+                    GenerarCodigoPaciente(contadorPacientes);
 
         }
 
