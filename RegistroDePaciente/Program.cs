@@ -32,6 +32,11 @@ namespace RegistroDePaciente
             
             }
 
+            // Datos para la creacion del Registro de Paciente
+            int contador_paciente, i, DNI, nivel_de_emergencia, prioridad_final;
+            string codigo_actual, nombres, apellidos, fecha,distrito, centroSalud, tipoSolicitud, descripcion, continuar, codigo_busqueda, decision, estado;
+            bool repetido, encontrado;
+
         }
 
     }
