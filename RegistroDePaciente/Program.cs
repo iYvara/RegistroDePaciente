@@ -238,6 +238,56 @@ namespace RegistroDePaciente
 
             } while (continuar == "S");
 
+            // Busqueda de pacientes
+
+            do
+            {
+                Console.WriteLine("");
+                Console.WriteLine("=======================");
+                Console.WriteLine("BUSCAR PACIENTE");
+                Console.WriteLine("=======================");
+
+                Console.WriteLine("Ingrese el codigo del paciente:");
+                codigo_busqueda = Console.ReadLine();
+
+                encontrado = false;
+
+                for (i = 0; i < contador_paciente; i++)
+                {
+                    if (codigo_busqueda == codigos_actual[i])
+                    {
+                        encontrado = true;
+
+                        Console.WriteLine("");
+                        Console.WriteLine("=======================");
+                        Console.WriteLine("PACIENTE ENCONTRADO");
+                        Console.WriteLine("=======================");
+
+                        Console.WriteLine("Codigo: " + codigos_actual[i]);
+                        Console.WriteLine("Fecha: " + fecha[i]);
+                        Console.WriteLine("Paciente: " + nombres[i] + " " + apellidos[i]);
+                        Console.WriteLine("DNI: " + DNI[i]);
+                        Console.WriteLine("Centro de Salud: " + centroSalud[i]);
+                        Console.WriteLine("Distrito: " + distrito[i]);
+                        Console.WriteLine("Tipo de Solicitud: " + tipoSolicitud[i]);
+                        Console.WriteLine("Nivel de Emergencia: " + nivel_de_emergencia[i]);
+                        Console.WriteLine("Estado: " + nivel_de_estado[i]);
+                        Console.WriteLine("Prioridad: " + prioridad_final[i]);
+                        Console.WriteLine("Descripcion: " + descripcion[i]);
+
+                        break;
+                    }
+                }
+
+                if (encontrado == false)
+                {
+                    Console.WriteLine("Error: no se encontro ningun paciente con ese codigo.");
+                }
+
+                Console.WriteLine("¿Desea buscar otro paciente? (S/N)");
+                decision = (Console.ReadLine().ToUpper());
+
+            } while (decision == "S");
         }
     }
 }
