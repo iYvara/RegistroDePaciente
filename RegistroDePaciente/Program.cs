@@ -51,6 +51,17 @@ namespace RegistroDePaciente
             int[] prioridad_final = new int[100];
             int[] nivel_de_estado = new int[100];
 
+            // Registro de paciente:
+
+        do 
+            { 
+            Console.WriteLine("=======================");
+            Console.WriteLine("");
+            Console.WriteLine("REGISTROS DE PACIENTES");
+            Console.WriteLine("");
+            Console.WriteLine("=======================");
+           }
+
 
         }
 
