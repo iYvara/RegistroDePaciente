@@ -91,6 +91,27 @@ namespace RegistroDePaciente
 
             } while (apellidos[contador_paciente - 1] == "");
 
+            // DNI
+            Console.WriteLine("Ingrese su DNI:");
+            DNI[contador_paciente - 1] = Convert.ToInt32(Console.ReadLine());
+
+            if (DNI[contador_paciente - 1] <= 10000000) || (DNI[contador_paciente] >= 9999999 )
+            {
+                Console.WriteLine("Error: El DNI debe tener 8 dígitos.");
+            }
+            bool repetido = false;
+            int i = 0;
+
+            while (i < contador_pacientes)
+            {
+                if (pacientes[i].Dni == dniIngresado)
+                {
+                    repetido = true;
+                    break;
+                }
+                i++;
+            }
+        }
         }
 
     }
