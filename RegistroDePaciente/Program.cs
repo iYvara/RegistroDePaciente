@@ -11,7 +11,7 @@ namespace RegistroDePaciente
         {
             string numerodecodigo;
             numerodecodigo = Convert.ToString(contador);
-            while (numerodecodigo.Length < 4)
+            while (numerodecodigo.Length < 4) ;
             {
                 numerodecodigo = "0" + numerodecodigo;
             }
@@ -22,9 +22,9 @@ namespace RegistroDePaciente
             static int CalcularPrioridad(int nivel_de_emergencia, string tipoSolicitud)
             {   
                 int prioridad;
-                prioridad  = nivel_de_emergencia * 2
+                prioridad = nivel_de_emergencia * 2;
                 tipoSolicitud = tipoSolicitud.ToUpper();
-                if (tipoSolicitud == "AMBULANCIA") || ( tipoSolicitud == "MEDICAMENTOS")
+                if (tipoSolicitud == "AMBULANCIA") || (tipoSolicitud == "MEDICAMENTOS")
                         {
                     prioridad = prioridad + 3;
                         }
@@ -102,7 +102,7 @@ namespace RegistroDePaciente
             bool repetido = false;
             int i = 0;
 
-            while (i < contador_pacientes)
+            while (i < contador_paciente)
             {
                 if (pacientes[i].Dni == dniIngresado)
                 {
@@ -113,7 +113,7 @@ namespace RegistroDePaciente
             }
             // Fecha de registro:
 
-            fecha[contadorPacientes - 1] =
+            fecha[contador_paciente - 1] =
     DateTime.Now.ToString("dd/MM/yyyy");
 
             // Informacion: 
@@ -123,8 +123,31 @@ namespace RegistroDePaciente
             string tipoSolicitud = "Ambulancia";
             string descripcion = "Requiere oxígeno de emergencia";
 
+            // Niveles de Emergencia:
+            do
+            {
+                Console.Writeline("Nivel de Emergencia (1 al 5)");
+                nivel_de_emergencia[contador_paciente - 1] = Console.ReadLine();
+                switch {
+                        case 1:
+                            Console.WriteLine("Nivel de emergencia: Muy Bajo");
+                            break;
+                        case 2:
+                            Console.WriteLine("Nivel de emergencia: Bajo");
+                            break;
+                        case 3:
+                            Console.WriteLine("Nivel de emergencia: Normal");
+                            break;
+                        case 4:
+                            Console.WriteLine("Nivel de emergencia: Alta");
+                            break;
+                        case 5:
+                            Console.WriteLine("Nivel de emergencia: Muy alta");
+                            break;
+                    default:
+                        Console.WriteLine("Error: Ingrese un nivel correctamente.")
+                    }
+            }
+
         }
     }
-
-    }
-}
