@@ -37,6 +37,21 @@ namespace RegistroDePaciente
             string codigo_actual, nombres, apellidos, fecha,distrito, centroSalud, tipoSolicitud, descripcion, continuar, codigo_busqueda, decision, estado;
             bool repetido, encontrado;
 
+            // Listas para los pacientes
+            string[] codigos_actual = new string[100];
+            string[] nombres = new string[100];
+            string[] apellidos = new string[100];
+            int[] DNI = new int[100];
+            string[] fecha = new string[100];
+            string[] distrito = new string[100];
+            string[] centroSalud = new string[100];
+            string[] tipoSolicitud = new string[100];
+            string[] descripcion = new string[100];
+            int[] nivel_de_emergencia = new int[100];
+            int[] prioridad_final = new int[100];
+            int[] nivel_de_estado = new int[100];
+
+
         }
 
     }
