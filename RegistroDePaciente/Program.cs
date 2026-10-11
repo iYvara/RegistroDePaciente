@@ -213,7 +213,31 @@ namespace RegistroDePaciente
                 Console.WriteLine("Estado: " + nivel_de_estado[contador_paciente - 1]);
                 Console.WriteLine("Prioridad: " + prioridad_final[contador_paciente - 1]);
                 Console.WriteLine("Descripcion: " + descripcion[contador_paciente - 1]);
+                
+                // Registrar otro paciente
 
-            }
+                Console.WriteLine("¿Desea registrar otro paciente? (S/N)");
+                continuar = (Console.ReadLine().ToUpper());
+
+                if (continuar == "S")
+                {
+                    if (contador_paciente < 101)
+                    {
+                        contador_paciente++;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Se alcanzo el limite de 100 pacientes.");
+                        continuar = "N";
+                    }
+                }
+                else
+                {
+                    continuar = "N";
+                }
+
+            } while (continuar == "S");
+
+        }
     }
 }
