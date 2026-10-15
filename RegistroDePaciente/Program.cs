@@ -4,12 +4,12 @@ namespace RegistroDePaciente
 {
     class Program
     {
-        // Generacion del codigo para el contador de pacientes
+        static string ruta = "pacientes.txt";
 
+        // arma el codigo tipo PAC-0001
         static string GenerarCodigoDePaciente(int contador)
         {
-            string numerodecodigo;
-            numerodecodigo = Convert.ToString(contador);
+            string numerodecodigo = Convert.ToString(contador);
 
             while (numerodecodigo.Length < 4)
             {
@@ -19,12 +19,9 @@ namespace RegistroDePaciente
             return "PAC-" + numerodecodigo;
         }
 
-        // Calcular la prioridad
-
         static int CalcularPrioridad(int nivel_de_emergencia, string tipoSolicitud)
         {
-            int prioridad;
-            prioridad = nivel_de_emergencia * 2;
+            int prioridad = nivel_de_emergencia * 2;
             tipoSolicitud = tipoSolicitud.ToUpper();
 
             if (tipoSolicitud == "AMBULANCIA" || tipoSolicitud == "MEDICAMENTOS")
@@ -37,13 +34,72 @@ namespace RegistroDePaciente
 
         static void Main(string[] args)
         {
-            // Datos para la creacion del Registro de Paciente
+            string opcion;
 
-            int contador_paciente, i;
-            string continuar, codigo_busqueda, decision, estado;
-            bool repetido, encontrado;
+            do
+            {
+                Console.WriteLine();
+                Console.WriteLine("=======================");
+                Console.WriteLine("SISTEMA DE PACIENTES");
+                Console.WriteLine("=======================");
+                Console.WriteLine("1. Registrar paciente");
+                Console.WriteLine("2. Mostrar pacientes guardados");
+                Console.WriteLine("3. Buscar paciente por codigo");
+                Console.WriteLine("4. Borrar todos los pacientes");
+                Console.WriteLine("5. Salir");
+                Console.WriteLine("=======================");
+                Console.WriteLine("Ingrese una opcion:");
+                opcion = Console.ReadLine();
 
-            // Listas para los pacientes
+                if (opcion == "1")
+                {
+                    RegistrarPacientes();
+                }
+                else if (opcion == "2")
+                {
+                    ArchivoPacientes.Mostrar();
+                    Pausar();
+                }
+                else if (opcion == "3")
+                {
+                    BuscarPaciente();
+                }
+                else if (opcion == "4")
+                {
+                    Console.WriteLine("¿Esta seguro de borrar todos los pacientes? (S/N)");
+                    string respuesta = Console.ReadLine().ToUpper();
+
+                    if (respuesta == "S")
+                    {
+                        ArchivoPacientes.Borrar();
+                        Console.WriteLine("Se borraron los registros.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Operacion cancelada.");
+                    }
+                    Pausar();
+                }
+                else if (opcion == "5")
+                {
+                    Console.WriteLine("Saliendo del sistema...");
+                }
+                else
+                {
+                    Console.WriteLine("Error: opcion no valida.");
+                    Pausar();
+                }
+
+            } while (opcion != "5");
+        }
+
+        static void RegistrarPacientes()
+        {
+            int contador_paciente, i, p;
+            string continuar, estado;
+            bool repetido;
+
+            string[] registros = ArchivoPacientes.Cargar();
 
             string[] codigos_actual = new string[100];
             string[] nombres = new string[100];
@@ -58,170 +114,185 @@ namespace RegistroDePaciente
             int[] prioridad_final = new int[100];
             string[] nivel_de_estado = new string[100];
 
+            // primero cargo lo que ya estaba guardado en el archivo
             contador_paciente = 1;
-            continuar = "S";
 
-            // Registro de paciente:
+            foreach (string registro_guardado in registros)
+            {
+                if (string.IsNullOrWhiteSpace(registro_guardado))
+                    continue;
+
+                string[] datos = registro_guardado.Split(';');
+
+                if (datos.Length >= 12 && contador_paciente <= 100)
+                {
+                    p = contador_paciente - 1;
+
+                    codigos_actual[p] = datos[0];
+                    nombres[p] = datos[1];
+                    apellidos[p] = datos[2];
+                    int.TryParse(datos[3], out DNI[p]);
+                    fecha[p] = datos[4];
+                    distrito[p] = datos[5];
+                    centroSalud[p] = datos[6];
+                    tipoSolicitud[p] = datos[7];
+                    descripcion[p] = datos[8];
+                    int.TryParse(datos[9], out nivel_de_emergencia[p]);
+                    int.TryParse(datos[10], out prioridad_final[p]);
+                    nivel_de_estado[p] = datos[11];
+
+                    contador_paciente++;
+                }
+            }
+
+            if (contador_paciente > 100)
+            {
+                Console.WriteLine("Se alcanzo el limite de 100 pacientes.");
+                Pausar();
+                return;
+            }
+
+            continuar = "S";
 
             do
             {
+                p = contador_paciente - 1;
+
                 Console.WriteLine("=======================");
-                Console.WriteLine("");
                 Console.WriteLine("REGISTROS DE PACIENTES");
-                Console.WriteLine("");
                 Console.WriteLine("=======================");
 
-                // Generacion del codigo de pacientes:
+                codigos_actual[p] = GenerarCodigoDePaciente(contador_paciente);
 
-                codigos_actual[contador_paciente - 1] =
-                    GenerarCodigoDePaciente(contador_paciente);
-
-                // Nombres y apellidos del paciente
-
+                // nombres
                 do
                 {
                     Console.WriteLine("Ingrese sus nombres:");
-                    nombres[contador_paciente - 1] = Console.ReadLine();
+                    nombres[p] = Console.ReadLine();
 
-                    if (nombres[contador_paciente - 1] == "")
+                    if (nombres[p] == "")
                     {
-                        Console.WriteLine("Error: El campo de nombres no puede estar vacío. Por favor, ingrese sus nombres.");
+                        Console.WriteLine("Error: El campo de nombres no puede estar vacio.");
                     }
+                } while (nombres[p] == "");
 
-                } while (nombres[contador_paciente - 1] == "");
-
+                // apellidos
                 do
                 {
                     Console.WriteLine("Ingrese los apellidos completos:");
-                    apellidos[contador_paciente - 1] = Console.ReadLine();
+                    apellidos[p] = Console.ReadLine();
 
-                    if (apellidos[contador_paciente - 1] == "")
+                    if (apellidos[p] == "")
                     {
                         Console.WriteLine("Error: debe ingresar los apellidos.");
                     }
+                } while (apellidos[p] == "");
 
-                } while (apellidos[contador_paciente - 1] == "");
-
-                // DNI
-
+                // DNI (8 digitos y que no se repita)
                 do
                 {
                     repetido = false;
 
                     Console.WriteLine("Ingrese su DNI:");
-                    int.TryParse(Console.ReadLine(), out DNI[contador_paciente - 1]);
+                    int.TryParse(Console.ReadLine(), out DNI[p]);
 
-                    if (DNI[contador_paciente - 1] < 10000000 ||DNI[contador_paciente - 1] > 99999999)
+                    if (DNI[p] < 10000000 || DNI[p] > 99999999)
                     {
-                        Console.WriteLine("Error: El DNI debe tener 8 dígitos.");
+                        Console.WriteLine("Error: El DNI debe tener 8 digitos.");
                         repetido = true;
                     }
                     else
                     {
-                        i = 0;
-
-                        while (i < contador_paciente - 1)
+                        for (i = 0; i < p; i++)
                         {
-                            if (DNI[i] == DNI[contador_paciente - 1])
+                            if (DNI[i] == DNI[p])
                             {
                                 repetido = true;
-                                Console.WriteLine("Error: este DNI ya fue registrado. Intente nuevamente.");
+                                Console.WriteLine("Error: este DNI ya fue registrado.");
                                 break;
                             }
-
-                            i++;
                         }
                     }
-
                 } while (repetido);
 
-                // Fecha de registro:
+                fecha[p] = DateTime.Now.ToString("dd/MM/yyyy");
 
-                fecha[contador_paciente - 1] = DateTime.Now.ToString("dd/MM/yyyy");
+                distrito[p] = "El Agustino";
+                centroSalud[p] = "Hospital Nacional Unanue";
+                tipoSolicitud[p] = "Ambulancia";
+                descripcion[p] = "Requiere oxigeno de emergencia";
 
-                // Informacion:
-
-                distrito[contador_paciente - 1] = "El Agustino";
-                centroSalud[contador_paciente - 1] = "Hospital Nacional Unanue";
-                tipoSolicitud[contador_paciente - 1] = "Ambulancia";
-                descripcion[contador_paciente - 1] = "Requiere oxígeno de emergencia";
-
-                // Niveles de Emergencia:
-
+                // nivel de emergencia
                 do
                 {
                     Console.WriteLine("Nivel de Emergencia (1 al 5)");
+                    int.TryParse(Console.ReadLine(), out nivel_de_emergencia[p]);
 
-                    int.TryParse(Console.ReadLine(), out nivel_de_emergencia[contador_paciente - 1]);
-
-                    switch (nivel_de_emergencia[contador_paciente - 1])
+                    switch (nivel_de_emergencia[p])
                     {
                         case 1:
                             Console.WriteLine("Nivel de emergencia: Muy Bajo");
                             estado = "Leve";
                             break;
-
                         case 2:
                             Console.WriteLine("Nivel de emergencia: Bajo");
                             estado = "Poco leve";
                             break;
-
                         case 3:
                             Console.WriteLine("Nivel de emergencia: Normal");
                             estado = "Severo";
                             break;
-
                         case 4:
                             Console.WriteLine("Nivel de emergencia: Alta");
                             estado = "Poco severo";
                             break;
-
                         case 5:
                             Console.WriteLine("Nivel de emergencia: Muy alta");
                             estado = "Peligroso";
                             break;
-
                         default:
                             Console.WriteLine("Error: Ingrese un nivel correctamente.");
                             estado = "";
                             break;
                     }
 
-                    nivel_de_estado[contador_paciente - 1] = estado;
+                    nivel_de_estado[p] = estado;
 
-                } while (nivel_de_emergencia[contador_paciente - 1] < 1 ||
-                         nivel_de_emergencia[contador_paciente - 1] > 5);
+                } while (nivel_de_emergencia[p] < 1 || nivel_de_emergencia[p] > 5);
 
-                // Calcular prioridad
-
-                prioridad_final[contador_paciente - 1] = CalcularPrioridad(nivel_de_emergencia[contador_paciente - 1], tipoSolicitud[contador_paciente - 1]);
-
-                // Mostrar registro
+                prioridad_final[p] = CalcularPrioridad(nivel_de_emergencia[p], tipoSolicitud[p]);
 
                 Console.WriteLine("=======================");
                 Console.WriteLine("SOLICITUD REGISTRADA");
                 Console.WriteLine("=======================");
+                Console.WriteLine("Codigo: " + codigos_actual[p]);
+                Console.WriteLine("Fecha: " + fecha[p]);
+                Console.WriteLine("Paciente: " + nombres[p] + " " + apellidos[p]);
+                Console.WriteLine("DNI: " + DNI[p]);
+                Console.WriteLine("Centro de Salud: " + centroSalud[p]);
+                Console.WriteLine("Distrito: " + distrito[p]);
+                Console.WriteLine("Tipo de Solicitud: " + tipoSolicitud[p]);
+                Console.WriteLine("Nivel de Emergencia: " + nivel_de_emergencia[p]);
+                Console.WriteLine("Estado: " + nivel_de_estado[p]);
+                Console.WriteLine("Prioridad: " + prioridad_final[p]);
+                Console.WriteLine("Descripcion: " + descripcion[p]);
 
-                Console.WriteLine("Codigo: " + codigos_actual[contador_paciente - 1]);
-                Console.WriteLine("Fecha: " + fecha[contador_paciente - 1]);
-                Console.WriteLine("Paciente: " + nombres[contador_paciente - 1] + " " + apellidos[contador_paciente - 1]);
-                Console.WriteLine("DNI: " + DNI[contador_paciente - 1]);
-                Console.WriteLine("Centro de Salud: " + centroSalud[contador_paciente - 1]);
-                Console.WriteLine("Distrito: " + distrito[contador_paciente - 1]);
-                Console.WriteLine("Tipo de Solicitud: " + tipoSolicitud[contador_paciente - 1]);
-                Console.WriteLine("Nivel de Emergencia: " + nivel_de_emergencia[contador_paciente - 1]);
-                Console.WriteLine("Estado: " + nivel_de_estado[contador_paciente - 1]);
-                Console.WriteLine("Prioridad: " + prioridad_final[contador_paciente - 1]);
-                Console.WriteLine("Descripcion: " + descripcion[contador_paciente - 1]);
-                
-                // Registrar otro paciente
+                // guardo en el archivo (mismo formato de antes, con ; al final)
+                string registro = codigos_actual[p] + ";" + nombres[p] + ";" + apellidos[p] + ";" +
+                                  DNI[p] + ";" + fecha[p] + ";" + distrito[p] + ";" +
+                                  centroSalud[p] + ";" + tipoSolicitud[p] + ";" + descripcion[p] + ";" +
+                                  nivel_de_emergencia[p] + ";" + prioridad_final[p] + ";" +
+                                  nivel_de_estado[p] + ";";
+
+                ArchivoPacientes.Guardar(registro);
+                Console.WriteLine("Paciente guardado correctamente.");
 
                 Console.WriteLine("¿Desea registrar otro paciente? (S/N)");
-                continuar = (Console.ReadLine().ToUpper());
+                continuar = Console.ReadLine().ToUpper();
 
                 if (continuar == "S")
                 {
-                    if (contador_paciente < 101)
+                    if (contador_paciente < 100)
                     {
                         contador_paciente++;
                     }
@@ -238,56 +309,66 @@ namespace RegistroDePaciente
 
             } while (continuar == "S");
 
-            // Busqueda de pacientes
+            Pausar();
+        }
 
-            do
+        // busca en el archivo, asi funciona con pacientes de ejecuciones anteriores
+        static void BuscarPaciente()
+        {
+            bool encontrado = false;
+
+            Console.WriteLine("=======================");
+            Console.WriteLine("BUSCAR PACIENTE");
+            Console.WriteLine("=======================");
+
+            Console.WriteLine("Ingrese el codigo del paciente:");
+            string codigo_busqueda = Console.ReadLine();
+
+            string[] registros = ArchivoPacientes.Cargar();
+
+            foreach (string registro in registros)
             {
-                Console.WriteLine("");
-                Console.WriteLine("=======================");
-                Console.WriteLine("BUSCAR PACIENTE");
-                Console.WriteLine("=======================");
+                if (string.IsNullOrWhiteSpace(registro))
+                    continue;
 
-                Console.WriteLine("Ingrese el codigo del paciente:");
-                codigo_busqueda = Console.ReadLine();
+                string[] datos = registro.Split(';');
 
-                encontrado = false;
-
-                for (i = 0; i < contador_paciente; i++)
+                if (datos.Length >= 12 && codigo_busqueda == datos[0])
                 {
-                    if (codigo_busqueda == codigos_actual[i])
-                    {
-                        encontrado = true;
+                    encontrado = true;
 
-                        Console.WriteLine("");
-                        Console.WriteLine("=======================");
-                        Console.WriteLine("PACIENTE ENCONTRADO");
-                        Console.WriteLine("=======================");
+                    Console.WriteLine("=======================");
+                    Console.WriteLine("PACIENTE ENCONTRADO");
+                    Console.WriteLine("=======================");
+                    Console.WriteLine("Codigo: " + datos[0]);
+                    Console.WriteLine("Fecha: " + datos[4]);
+                    Console.WriteLine("Paciente: " + datos[1] + " " + datos[2]);
+                    Console.WriteLine("DNI: " + datos[3]);
+                    Console.WriteLine("Centro de Salud: " + datos[6]);
+                    Console.WriteLine("Distrito: " + datos[5]);
+                    Console.WriteLine("Tipo de Solicitud: " + datos[7]);
+                    Console.WriteLine("Nivel de Emergencia: " + datos[9]);
+                    Console.WriteLine("Estado: " + datos[11]);
+                    Console.WriteLine("Prioridad: " + datos[10]);
+                    Console.WriteLine("Descripcion: " + datos[8]);
 
-                        Console.WriteLine("Codigo: " + codigos_actual[i]);
-                        Console.WriteLine("Fecha: " + fecha[i]);
-                        Console.WriteLine("Paciente: " + nombres[i] + " " + apellidos[i]);
-                        Console.WriteLine("DNI: " + DNI[i]);
-                        Console.WriteLine("Centro de Salud: " + centroSalud[i]);
-                        Console.WriteLine("Distrito: " + distrito[i]);
-                        Console.WriteLine("Tipo de Solicitud: " + tipoSolicitud[i]);
-                        Console.WriteLine("Nivel de Emergencia: " + nivel_de_emergencia[i]);
-                        Console.WriteLine("Estado: " + nivel_de_estado[i]);
-                        Console.WriteLine("Prioridad: " + prioridad_final[i]);
-                        Console.WriteLine("Descripcion: " + descripcion[i]);
-
-                        break;
-                    }
+                    break;
                 }
+            }
 
-                if (encontrado == false)
-                {
-                    Console.WriteLine("Error: no se encontro ningun paciente con ese codigo.");
-                }
+            if (!encontrado)
+            {
+                Console.WriteLine("Error: no se encontro ningun paciente con ese codigo.");
+            }
 
-                Console.WriteLine("¿Desea buscar otro paciente? (S/N)");
-                decision = (Console.ReadLine().ToUpper());
+            Pausar();
+        }
 
-            } while (decision == "S");
+        static void Pausar()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Presiona Enter para volver al menu.");
+            Console.ReadLine();
         }
     }
 }
